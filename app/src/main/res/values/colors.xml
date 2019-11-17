@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#303133</color>
+    <color name="colorNormal">#606266</color>
+    <color name="colorMinor">#909399</color>
+    <color name="colorLess">#C0C4CC</color>
+
+    <color name="tab_panel_bg">#ffffff</color>
+    <color name="tab_panel_divider">@color/colorLess</color>
+</resources>

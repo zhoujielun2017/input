@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="app_name">QZBH</string>
+    <string name="ime_name">SampleInputMethod</string>
+    <string name="setting">设置</string>
+
+</resources>
