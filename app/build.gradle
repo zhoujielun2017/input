@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 28
@@ -9,6 +10,13 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    greendao{
+        schemaVersion 1  //数据库版本号
+        daoPackage 'com.input.qz.input.dao'//DaoMaster、DaoSession、XXDao的包名
+        targetGenDir 'src/main/java' //DaoMaster、DaoSession、XXDao的路径
+        generateTests false //设置为true以自动生成单元测试。
+        targetGenDirTests 'src/test/java' //应存储生成的单元测试的基本目录。
     }
     buildTypes {
         release {
@@ -25,11 +33,13 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.qmuiteam:qmui:1.4.0'
     implementation 'com.github.kam520c:KeyBoardView:1.0'
-    implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'org.greenrobot:greendao:3.2.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation "org.robolectric:robolectric:4.3.1"
+    compile project(path: ':pinyin2hanzi')
 }

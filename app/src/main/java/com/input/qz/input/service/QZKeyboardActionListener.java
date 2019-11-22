@@ -8,6 +8,7 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.input.qz.input.constants.InputContainer;
 import com.input.qz.input.constants.QZKeyCode;
 import com.input.qz.input.service.impl.ChinaOnKeyAdapter;
 import com.input.qz.input.service.impl.QZKeyboard;
@@ -73,9 +74,14 @@ public class QZKeyboardActionListener implements KeyboardView.OnKeyboardActionLi
 
             // 中文键盘切换
             case QZKeyCode.CODE_TYPE_CHINA:
+            case QZKeyCode.CODE_TYPE_SWITCH_EN_ZH:
                 keyboardView.switchKeyBoardChina();
+                InputContainer.getInstance().resetView();
                 break;
-
+            // 中文切换英文键盘
+            case QZKeyCode.CODE_TYPE_SWITCH_ZH_EN:
+                keyboardView.switchKeyBoardLetter(false);
+                break;
             //settings
             case QZKeyCode.CODE_SETTING:
                 Toast.makeText(service, "Settings==", Toast.LENGTH_SHORT).show();
@@ -88,7 +94,6 @@ public class QZKeyboardActionListener implements KeyboardView.OnKeyboardActionLi
 
             //一般文本
             default:
-
                 qzKeyboard.getOnKeyAdapter().onKey(primaryCode,keyCodes);
 
 

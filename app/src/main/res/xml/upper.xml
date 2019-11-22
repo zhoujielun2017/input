@@ -135,17 +135,13 @@
             android:keyWidth="12.6%p"/>
 
         <Key
-            android:codes="-100"
-            android:keyIcon="@mipmap/key_setting"
-            android:keyWidth="11%p"/>
-        <Key
             android:codes="32"
             android:isRepeatable="true"
             android:keyLabel="space"
-            android:keyWidth="31.6%p"/>
+            android:keyWidth="44.2%p"/>
         <Key
             android:codes="-104"
-            android:keyIcon="@mipmap/key_switch"
+            android:keyIcon="@mipmap/key_en_zh"
             android:keyWidth="12.6%p"/>
         <Key
             android:codes="-4"

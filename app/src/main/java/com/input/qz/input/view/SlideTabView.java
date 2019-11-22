@@ -42,7 +42,7 @@ public class SlideTabView extends HorizontalScrollView{
     //上一次位置
     private int lastIndex = 0;
     //满屏显示数量
-    private float maxCount = 5.1f;
+    private float maxCount = 4.1f;
     //偏移百分比
     private float offSet;
     //非选中字体颜色
@@ -133,7 +133,7 @@ public class SlideTabView extends HorizontalScrollView{
     }
 
     public CharSequence getTabText(int index){
-        if(textViews.size()>=index){
+        if(textViews.size()>index){
             return textViews.get(index).getText();
         }else{
             return null;
@@ -145,6 +145,7 @@ public class SlideTabView extends HorizontalScrollView{
     }
 
     public void reset(){
+        this.currentIndex=0;
         this.textViews.clear();
         linearLayout.removeAllViews();
     }
@@ -162,11 +163,17 @@ public class SlideTabView extends HorizontalScrollView{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if(textViews.isEmpty()){
+            return;
+        }
         float h = getHeight();
 
 //        paint.setColor(getResources().getColor(offLineColor));
         View view = linearLayout.getChildAt(currentIndex);
-
+        if(null==view){
+            Log.w(TAG,currentIndex+"");
+            return;
+        }
         float lineLeft = view.getLeft();
         float lineRight = view.getRight();
 
@@ -200,33 +207,5 @@ public class SlideTabView extends HorizontalScrollView{
         this.noCurrColor = noCurrColor;
     }
 
-    public interface OnTabSelectedListener {
-        /**
-         * 当某个 Tab 被选中时会触发
-         *
-         * @param index 被选中的 Tab 下标
-         */
-        void onTabSelected(int index);
 
-        /**
-         * 当某个 Tab 被取消选中时会触发
-         *
-         * @param index 被取消选中的 Tab 下标
-         */
-        void onTabUnselected(int index);
-
-        /**
-         * 当某个 Tab 处于被选中状态下再次被点击时会触发
-         *
-         * @param index 被再次点击的 Tab 下标
-         */
-        void onTabReselected(int index);
-
-        /**
-         * 当某个 Tab 被双击时会触发
-         *
-         * @param index 被双击的 Tab 下标
-         */
-        void onDoubleTap(int index);
-    }
 }

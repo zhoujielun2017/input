@@ -9,15 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 import android.widget.TextView;
 
 import com.input.qz.input.R;
+import com.input.qz.input.constants.InputContainer;
+import com.input.qz.input.service.impl.ChinaOnTabSelected;
+import com.input.qz.input.service.impl.LetterOnTabSelected;
+import com.input.qz.input.view.OnTabSelectedListener;
 import com.input.qz.input.view.SlideTabView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class QZInputMethodService extends InputMethodService {
@@ -52,28 +54,55 @@ public class QZInputMethodService extends InputMethodService {
         Log.i(TAG, "onCreateInputView -----------");
         View view = getLayoutInflater().
                 inflate(R.layout.keyboard_global, null);
-        SlideTabView keyboardSpanTab = view.findViewById(R.id.keyboardSpanTab);
-        initKeyBoardView(view);
+        final SlideTabView keyboardSpanTab = view.findViewById(R.id.keyboardSpanTab);
+        TextView keyboardLetterInput = view.findViewById(R.id.keyboardLetterInput);
+        final QZKeyboardView keyboardView = view.findViewById(R.id.keyboardView);
 
-        List<String> list = new ArrayList<String>();
-        for (int i = 0; i < 8; i++) {
-            list.add("Item" + (i + 1));
-        }
-        keyboardSpanTab.initTab(list);
+//        List<String> list = new ArrayList<String>();
+//        for (int i = 0; i < 8; i++) {
+//            list.add("Item" + (i + 1));
+//        }
+//        keyboardSpanTab.initTab(list);
+        final InputConnection ic = this.getCurrentInputConnection();
+        final ChinaOnTabSelected chinaOnTabSelected = new ChinaOnTabSelected(this);
+        final LetterOnTabSelected letterOnTabSelected = new LetterOnTabSelected(this);
+        keyboardSpanTab.addOnTabSelectedListener(new OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(int index) {
+                if(keyboardView.isChinaKeyboard()){
+                    chinaOnTabSelected.onTabSelected(index);
+                }else{
+                    letterOnTabSelected.onTabSelected(index);
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(int index) {
+
+            }
+
+            @Override
+            public void onTabReselected(int index) {
+
+            }
+
+            @Override
+            public void onDoubleTap(int index) {
+
+            }
+        });
+        InputContainer.getInstance().setKeyboardSpanTab(keyboardSpanTab);
+        InputContainer.getInstance().setKeyboarTextView(keyboardLetterInput);
         return view;
     }
 
-    private void initKeyBoardView(View view){
-
-        QZKeyboardView keyboardView = view.findViewById(R.id.keyboardView);
-        keyboardView.getCurrentKeyboard().getOnKeyAdapter().setView(view);
-    }
     /**
      *
      */
     @Override
     public View onCreateCandidatesView() {
-        Log.i(TAG, "CandidateView -----------");
+        Log.i(TAG, "onCreateCandidatesView -----------");
         return null;
     }
 
@@ -82,7 +111,7 @@ public class QZInputMethodService extends InputMethodService {
      */
     @Override
     public void onStartInput(EditorInfo attribute, boolean restarting) {
-
+        Log.i(TAG, "onStartInput -----------");
     }
 
     /**
@@ -90,7 +119,7 @@ public class QZInputMethodService extends InputMethodService {
      */
     @Override
     public void onFinishInput() {
-
+        Log.i(TAG, "onFinishInput -----------");
     }
 
     /**
@@ -98,7 +127,7 @@ public class QZInputMethodService extends InputMethodService {
      */
     @Override
     public void onStartInputView(EditorInfo attribute, boolean restarting) {
-
+        Log.i(TAG, "onStartInputView -----------"+restarting);
     }
 
     /**
@@ -106,7 +135,7 @@ public class QZInputMethodService extends InputMethodService {
      */
     @Override
     public void onCurrentInputMethodSubtypeChanged(InputMethodSubtype subtype) {
-
+        Log.i(TAG, "onCurrentInputMethodSubtypeChanged -----------");
     }
 
     /**
@@ -116,7 +145,7 @@ public class QZInputMethodService extends InputMethodService {
     public void onUpdateSelection(int oldSelStart, int oldSelEnd,
                                   int newSelStart, int newSelEnd,
                                   int candidatesStart, int candidatesEnd) {
-
+        Log.i(TAG, "onUpdateSelection -----------"+oldSelStart);
     }
 
     /**
@@ -124,7 +153,7 @@ public class QZInputMethodService extends InputMethodService {
      */
     @Override
     public void onDisplayCompletions(CompletionInfo[] completions) {
-
+        Log.i(TAG, "onDisplayCompletions -----------");
     }
 
     /**
@@ -132,6 +161,7 @@ public class QZInputMethodService extends InputMethodService {
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.i(TAG, "onKeyDown -----------"+keyCode);
         return false;
     }
 
@@ -140,6 +170,7 @@ public class QZInputMethodService extends InputMethodService {
      */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.i(TAG, "onKeyUp -----------"+keyCode);
         return false;
     }
 

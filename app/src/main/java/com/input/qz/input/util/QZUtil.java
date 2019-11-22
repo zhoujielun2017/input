@@ -6,7 +6,6 @@ import android.inputmethodservice.Keyboard;
 import android.text.TextUtils;
 import android.view.WindowManager;
 
-
 import com.input.qz.input.MyApp;
 import com.input.qz.input.R;
 import com.input.qz.input.constants.QZKeyCode;

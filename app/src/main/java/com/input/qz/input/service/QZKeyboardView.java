@@ -13,6 +13,7 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -36,6 +37,7 @@ import java.util.List;
  */
 public class QZKeyboardView extends KeyboardView {
 
+    public static final String TAG="QZKeyboardView";
     //点击键盘时 按下的位置坐标
     private float mDownX;
     private float mDownY;
@@ -43,8 +45,10 @@ public class QZKeyboardView extends KeyboardView {
     // 数字键盘／字母键盘／符号键盘
     private QZKeyboard mKeyboardNum,mKeyboardUpperLetter,mKeyboardLetter, mKeyboardSymbol,mKeyboardChina;
     private QZKeyboard currentKeyboard;
+    private KeyboardEnum currentKeyboardEnum;
     //整个view的引用
     private View view;
+    private OnKeyboardActionListener onKeyboardActionListener;
 
     public QZKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -69,9 +73,11 @@ public class QZKeyboardView extends KeyboardView {
      */
     public void switchKeyBoardLetter(boolean upper){
         if(upper){
+            currentKeyboardEnum=KeyboardEnum.UPPERLETTER;
             currentKeyboard=mKeyboardUpperLetter;
             setKeyboard(mKeyboardUpperLetter.getKeyboard());
         }else{
+            currentKeyboardEnum=KeyboardEnum.LOWERLETTER;
             currentKeyboard=mKeyboardLetter;
             setKeyboard(mKeyboardLetter.getKeyboard());
         }
@@ -82,6 +88,7 @@ public class QZKeyboardView extends KeyboardView {
      */
     public void switchKeyBoardSymbol(){
         currentKeyboard=mKeyboardSymbol;
+        currentKeyboardEnum=KeyboardEnum.SYMBOL;
         setKeyboard(mKeyboardSymbol.getKeyboard());
     }
 
@@ -90,9 +97,21 @@ public class QZKeyboardView extends KeyboardView {
      */
     public void switchKeyBoardChina(){
         currentKeyboard=mKeyboardChina;
+        currentKeyboardEnum=KeyboardEnum.CHINA;
+//        Log.i(TAG,"switchKeyBoardChina");
         setKeyboard(mKeyboardChina.getKeyboard());
     }
 
+    public boolean isChinaKeyboard(){
+        return currentKeyboardEnum==KeyboardEnum.CHINA;
+    }
+    public boolean isLetterKeyboard(){
+        return currentKeyboardEnum==KeyboardEnum.LOWERLETTER||currentKeyboardEnum==KeyboardEnum.UPPERLETTER;
+    }
+
+    public boolean isSymbolKeyboard(){
+        return currentKeyboardEnum==KeyboardEnum.SYMBOL;
+    }
 
     private void initKeyboardView(Context context) {
         Keyboard keyboardUpperLetter = new Keyboard(context, R.xml.upper);
@@ -105,12 +124,15 @@ public class QZKeyboardView extends KeyboardView {
         mKeyboardLetter = new QZKeyboard(keyboardLetter,new LetterOnKeyAdapter((InputMethodService)this.getContext()));
         mKeyboardNum = new QZKeyboard(keyboardNum,new LetterOnKeyAdapter((InputMethodService)this.getContext()));
         mKeyboardSymbol = new QZKeyboard(keyboardSymbol,new LetterOnKeyAdapter((InputMethodService)this.getContext()));
-        mKeyboardChina = new QZKeyboard(keyboardChina,new LetterOnKeyAdapter((InputMethodService)this.getContext()));
+        mKeyboardChina = new QZKeyboard(keyboardChina,new ChinaOnKeyAdapter((InputMethodService)this.getContext()));
         //默认显示字母键盘
         switchKeyBoardChina();
         setOnKeyboardActionListener(new QZKeyboardActionListener(this));
     }
 
+    public void addOnKeyboardActionListener(OnKeyboardActionListener listener){
+        this.onKeyboardActionListener=listener;
+    }
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -228,7 +250,4 @@ public class QZKeyboardView extends KeyboardView {
         return currentKeyboard;
     }
 
-    public void setView(View view) {
-        this.view = view;
-    }
 }

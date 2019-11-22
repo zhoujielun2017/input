@@ -29,6 +29,10 @@ public class QZKeyCode {
     public static final int CODE_TYPE_CHINA = -104;
     //切换输入法
     public static final int CODE_TYPE_SWITCH_INPUT = -105;
+    //中到英的切换
+    public static final int CODE_TYPE_SWITCH_ZH_EN = -106;
+    //英到中的切换
+    public static final int CODE_TYPE_SWITCH_EN_ZH = -107;
     //space
     public static final int CODE_SPACE = 32;
 

@@ -6,5 +6,4 @@ public interface OnKeyAdapter {
 
     void onKey(int primaryCode, int[] keyCodes);
 
-    void setView(View view);
 }
